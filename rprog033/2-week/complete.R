@@ -15,6 +15,6 @@ complete <- function(directory, id = 1:332) {
       record[i,"id"] <- id[i]
       record[i,"nobs"] <- nrow(data[!is.na(data$sulfate) & !is.na(data$nitrate),])
    }
-   
+#    record[which(record$nobs == 0),"nobs"] <- NA
    record
 }

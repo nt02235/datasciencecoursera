@@ -1,12 +1,22 @@
 corr <- function(directory, threshold = 0) {
-   ## 'directory' is a character vector of length 1 indicating
-   ## the location of the CSV files
+   records <- complete(directory)
+   records <- record[which(records$nobs > threshold), -2]
    
-   ## 'threshold' is a numeric vector of length 1 indicating the
-   ## number of completely observed observations (on all
-   ## variables) required to compute the correlation between
-   ## nitrate and sulfate; the default is 0
+   cor <- numeric()
    
-   ## Return a numeric vector of correlations
-   ## NOTE: Do not round the result!
+   if(length(records) != 0){
+      
+      files <- vector('character')
+      files <- paste("00", records[records < 10], sep ="")
+      files <- c(files, paste("0", records[records > 9 & records < 100], sep = ""))
+      files <- c(files, records[records > 99])
+      files <- paste(directory,"/", files,".csv",sep="")
+      
+      for(i in 1:length(records)){
+         data <- read.csv(files[i], header = T)
+         cor[i] <- cor(data$nitrate, data$sulfate, use = "complete.obs")
+      }
+   }
+   
+   cor
 }
